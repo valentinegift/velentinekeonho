@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- heart to you Placeholder untuk judul -->
+    <title>heart to you</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Chewy', cursive;
+            background-image: url('https://files.catbox.moe/vvhdw0.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+            touch-action: pan-y;
+        }
+
+        /* Pink Color Palette */
+        :root {
+            --color-1: #F7EEED;
+            --color-2: #FAE6E7;
+            --color-3: #F7D1D8;
+            --color-4: #F4BBC9;
+            --color-5: #F6A6BB;
+        }
+
+        .color-1 { color: var(--color-1); }
+        .color-2 { color: var(--color-2); }
+        .color-3 { color: var(--color-3); }
+        .color-4 { color: var(--color-4); }
+        .color-5 { color: var(--color-5); }
+
+        .bg-color-1 { background-color: var(--color-1); }
+        .bg-color-2 { background-color: var(--color-2); }
+        .bg-color-3 { background-color: var(--color-3); }
+        .bg-color-4 { background-color: var(--color-4); }
+        .bg-color-5 { background-color: var(--color-5); }
+
+        /* Pita floating background */
+        .ribbon-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .ribbon {
+            position: absolute;
+            background-image: url('https://files.catbox.moe/bzj2ty.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 120px;
+            height: 120px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .ribbon:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .ribbon:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .ribbon:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+        .ribbon:nth-child(4) { bottom: 20%; right: 5%; animation-delay: 3s; }
+        .ribbon:nth-child(5) { top: 40%; left: 80%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 20px 15px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Page 1: Passcode Entry */
+        .passcode-container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            gap: 30px;
+        }
+
+        .login-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(247, 238, 237, 0.95);
+            border-radius: 25px;
+            padding: 30px 25px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(246, 166, 187, 0.3);
+            border: 8px solid var(--color-4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(244, 187, 201, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .photo-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 12px solid var(--color-5);
+            padding: 8px;
+            background: linear-gradient(135deg, var(--color-4), var(--color-5));
+            box-shadow: 0 15px 35px rgba(246, 166, 187, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-frame::before {
+            content: '💖';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 35px;
+            z-index: 2;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('https://files.catbox.moe/bzj2ty.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            bottom: -15px;
+            right: -15px;
+            transform: rotate(25deg);
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 6px solid white;
+        }
+
+        .passcode-input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .passcode-display {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+        }
+
+        .passcode-digit {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--color-4);
+            border-radius: 15px;
+            background-color: white;
+            font-size: 2.2rem;
+            text-align: center;
+            font-family: 'Chewy', cursive;
+            color: var(--color-5);
+            box-shadow: 0 5px 15px rgba(244, 187, 201, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .passcode-digit.filled {
+            background-color: var(--color-2);
+            border-color: var(--color-5);
+            color: var(--color-5);
+        }
+
+        .passcode-instruction {
+            font-size: 1.5rem;
+            color: var(--color-5);
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+        }
+
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .number-btn {
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-3), var(--color-4));
+            font-size: 2rem;
+            font-family: 'Chewy', cursive;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 20px rgba(244, 187, 201, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+        }
+
+        .number-btn:active {
+            transform: scale(0.92);
+            background: linear-gradient(135deg, var(--color-4), var(--color-5));
+        }
+
+        .clear-btn {
+            grid-column: span 3;
+            width: 100%;
+            height: 55px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--color-5), var(--color-4));
+            color: white;
+            font-size: 1.5rem;
+            margin-top: 5px;
+        }
+
+        .error-message {
+            color: #ff6b8b;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            height: 25px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        /* Page 2: Main Content */
+        .main-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+
+        .greeting-section {
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .hello-text {
+            font-size: clamp(2.8rem, 10vw, 4rem);
+            color: var(--color-5);
+            text-shadow: 3px 3px 0px rgba(247, 209, 216, 0.5);
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .name-placeholder {
+            color: white;
+            background: linear-gradient(135deg, var(--color-5), var(--color-4));
+            padding: 8px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 10px 25px rgba(246, 166, 187, 0.4);
+            animation: heartbeat 2s infinite;
+            border: 4px solid white;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .pick-card-text {
+            font-size: clamp(2rem, 7vw, 3rem);
+            color: var(--color-4);
+            margin: 30px 0 40px;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 0 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px 25px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(246, 166, 187, 0.3);
+            border: 6px solid transparent;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: var(--color-5);
+            box-shadow: 0 25px 50px rgba(246, 166, 187, 0.5);
+        }
+
+        .card-icon {
+            width: 120px;
+            height: 120px;
+            background-image: url('https://files.catbox.moe/rscyc1.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 30px;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Modal for card details */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 30px;
+            padding: 40px 30px;
+            max-width: 90%;
+            width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            border: 12px solid var(--color-3);
+            animation: modalAppear 0.5s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: var(--color-5);
+            border: none;
+            font-size: 2.5rem;
+            color: white;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(246, 166, 187, 0.5);
+            z-index: 10;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+            background: var(--color-4);
+        }
+
+        .modal-title {
+            font-size: 2.8rem;
+            color: var(--color-5);
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 0px rgba(247, 209, 216, 0.5);
+        }
+
+        /* Card 1: Valentine Letter */
+        .letter-content {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: #555;
+            text-align: left;
+            background-color: rgba(247, 238, 237, 0.5);
+            padding: 30px;
+            border-radius: 20px;
+            border-left: 10px solid var(--color-5);
+            white-space: pre-line;
+        }
+
+        /* Card 2: Flower */
+        .flower-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .flower-image {
+            width: 200px;
+            height: 200px;
+            background-image: url('https://files.catbox.moe/h21gqs.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: rotateFlower 25s linear infinite;
+        }
+
+        @keyframes rotateFlower {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .flower-message {
+            font-size: 1.6rem;
+            color: var(--color-5);
+            text-align: center;
+            line-height: 1.8;
+            padding: 0 20px;
+            background-color: rgba(247, 238, 237, 0.5);
+            padding: 25px;
+            border-radius: 20px;
+            border-right: 10px solid var(--color-4);
+        }
+
+        /* Card 3: Vouchers */
+        .vouchers-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .voucher {
+            background: linear-gradient(135deg, var(--color-2), var(--color-3));
+            border-radius: 25px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(244, 187, 201, 0.5);
+            border: 8px solid white;
+        }
+
+        .voucher::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://files.catbox.moe/bzj2ty.png');
+            background-size: 100px;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .voucher-title {
+            font-size: 2.2rem;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 3px 3px 0px rgba(244, 187, 201, 0.5);
+        }
+
+        .voucher-code {
+            font-size: 2rem;
+            color: var(--color-5);
+            background-color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            font-family: 'Chewy', cursive;
+        }
+
+        .voucher-desc {
+            font-size: 1.3rem;
+            color: white;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+
+        /* Back button */
+        .logout-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--color-5), var(--color-4));
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.3rem;
+            z-index: 100;
+            box-shadow: 0 8px 25px rgba(246, 166, 187, 0.6);
+            border: 4px solid white;
+            touch-action: manipulation;
+            cursor: pointer;
+            font-family: 'Chewy', cursive;
+        }
+
+        .logout-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-1), var(--color-3));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-heart {
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-5);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(246, 166, 187, 0.5);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .login-box {
+                width: 95%;
+                padding: 25px 20px;
+            }
+            
+            .photo-frame {
+                width: 180px;
+                height: 180px;
+                border-width: 10px;
+            }
+            
+            .passcode-digit {
+                width: 55px;
+                height: 55px;
+                font-size: 2rem;
+            }
+            
+            .number-btn {
+                width: 65px;
+                height: 65px;
+                font-size: 1.8rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 25px;
+                padding: 0 15px;
+            }
+            
+            .card {
+                min-height: 280px;
+                padding: 30px 20px;
+            }
+            
+            .card-icon {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .ribbon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .flower-image {
+                width: 180px;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-frame {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .passcode-digit {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+            
+            .number-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.6rem;
+            }
+            
+            .hello-text {
+                font-size: 2.5rem;
+            }
+            
+            .pick-card-text {
+                font-size: 2rem;
+            }
+            
+            .card-icon {
+                width: 90px;
+                height: 90px;
+                margin-bottom: 25px;
+            }
+            
+            .logout-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 25px;
+                font-size: 1.2rem;
+            }
+            
+            .voucher {
+                padding: 25px 20px;
+            }
+            
+            .voucher-title {
+                font-size: 1.8rem;
+            }
+            
+            .voucher-code {
+                font-size: 1.7rem;
+                padding: 10px 20px;
+            }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .passcode-container {
+                min-height: auto;
+                padding: 20px 0;
+            }
+            
+            .login-box {
+                flex-direction: row;
+                gap: 30px;
+                max-width: 700px;
+                padding: 25px;
+            }
+            
+            .photo-side {
+                margin-bottom: 0;
+            }
+            
+            .photo-frame {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .cards-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            
+            .card {
+                min-height: 250px;
+                padding: 20px 15px;
+            }
+            
+            .card-icon {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading screen -->
+    <div class="loading" id="loading">
+        <div class="loading-heart">💖</div>
+    </div>
+
+    <!-- Pita floating background -->
+    <div class="ribbon-bg">
+        <div class="ribbon"></div>
+        <div class="ribbon"></div>
+        <div class="ribbon"></div>
+        <div class="ribbon"></div>
+        <div class="ribbon"></div>
+    </div>
+
+    <!-- Page 1: Passcode Entry -->
+    <div class="page active" id="page1">
+        <div class="passcode-container">
+            <div class="login-box">
+                <div class="photo-side">
+                    <div class="photo-frame">
+                        <!-- [PHOTO_URL] Placeholder untuk URL foto -->
+                        <img src="images/photo_8523055505_1770768264.jpg" alt="Our Photo" class="profile-photo">
+                    </div>
+                    <div class="passcode-instruction">
+                        Enter the secret code:
+                    </div>
+                </div>
+                
+                <div class="passcode-input-container">
+                    <div class="passcode-display">
+                        <div class="passcode-digit" id="digit1"></div>
+                        <div class="passcode-digit" id="digit2"></div>
+                        <div class="passcode-digit" id="digit3"></div>
+                        <div class="passcode-digit" id="digit4"></div>
+                    </div>
+                    
+                    <div class="number-pad">
+                        <button class="number-btn" data-number="1">1</button>
+                        <button class="number-btn" data-number="2">2</button>
+                        <button class="number-btn" data-number="3">3</button>
+                        <button class="number-btn" data-number="4">4</button>
+                        <button class="number-btn" data-number="5">5</button>
+                        <button class="number-btn" data-number="6">6</button>
+                        <button class="number-btn" data-number="7">7</button>
+                        <button class="number-btn" data-number="8">8</button>
+                        <button class="number-btn" data-number="9">9</button>
+                        <button class="number-btn" data-number="0">0</button>
+                        <button class="number-btn clear-btn" id="clearBtn">Clear</button>
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        Wrong code! Try again.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Main Content -->
+    <div class="page" id="page2">
+        <button class="logout-btn" id="logoutBtn">🔒</button>
+        
+        <div class="main-container">
+            <div class="greeting-section">
+                <h1 class="hello-text">Hi, <span class="name-placeholder" id="userNameDisplay">my funny Valentine</span></h1>
+            </div>
+            
+            <h2 class="pick-card-text">pick a card 💌</h2>
+            
+            <div class="cards-container">
+                <!-- Card 1: Valentine Letter -->
+                <div class="card" data-card="1">
+                    <div class="card-icon"></div>
+                </div>
+                
+                <!-- Card 2: Flower -->
+                <div class="card" data-card="2">
+                    <div class="card-icon"></div>
+                </div>
+                
+                <!-- Card 3: Vouchers -->
+                <div class="card" data-card="3">
+                    <div class="card-icon"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Card Details -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            
+            <!-- Card 1 Content: Valentine Letter -->
+            <div class="modal-card" id="modalCard1">
+                <h3 class="modal-title">💌</h3>
+                <div class="letter-content" id="letterContent">
+                    <!-- happy valentines day. ⭐️🩷<br>you’re the meanings in every single poem’s came out to my necessaries-lifetime-because you were here, the moonlight in my middle years pucker continuing to this february. you’re always wild up my stardust transcendence within a pairing liberated legacy barefoot thru the whole world fulfilled with our compared each other against on this valentines day, i’ll sending you my love my heart also my solstices soul that paint your dappled movement awestruck our friendship leaning towards the infinity blade fazes, i look upon your arrival in adoration affect creatures and were stands by the sentiment we’ve made beginnst our past year, past month, past daays! i hope offering you this letter, it will make you loved with all my heart, &lt;3. Placeholder untuk isi surat cinta -->
+                    happy valentines day. ⭐️🩷<br>you’re the meanings in every single poem’s came out to my necessaries-lifetime-because you were here, the moonlight in my middle years pucker continuing to this february. you’re always wild up my stardust transcendence within a pairing liberated legacy barefoot thru the whole world fulfilled with our compared each other against on this valentines day, i’ll sending you my love my heart also my solstices soul that paint your dappled movement awestruck our friendship leaning towards the infinity blade fazes, i look upon your arrival in adoration affect creatures and were stands by the sentiment we’ve made beginnst our past year, past month, past daays! i hope offering you this letter, it will make you loved with all my heart, &lt;3.
+                </div>
+            </div>
+            
+            <!-- Card 2 Content: Flower -->
+            <div class="modal-card" id="modalCard2" style="display: none;">
+                <h3 class="modal-title">🌸</h3>
+                <div class="flower-container">
+                    <div class="flower-image"></div>
+                    <div class="flower-message">
+                        <!-- This sentence symbolizes that I love you always Placeholder untuk pesan bunga -->
+                        This sentence symbolizes that I love you always
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card 3 Content: Vouchers -->
+            <div class="modal-card" id="modalCard3" style="display: none;">
+                <h3 class="modal-title">💝</h3>
+                <div class="vouchers-container">
+                    <div class="voucher">
+                        <h4 class="voucher-title">Free Hug Voucher</h4>
+                        <div class="voucher-code">HUG-4-EVER</div>
+                        <p class="voucher-desc">
+                            Redeemable for one warm, tight hug whenever you need it most. 
+                            No expiration date!
+                        </p>
+                    </div>
+                    
+                    <div class="voucher">
+                        <h4 class="voucher-title">Free Kiss Voucher</h4>
+                        <div class="voucher-code">KISS-2-LOVE</div>
+                        <p class="voucher-desc">
+                            Redeemable for one sweet kiss, delivered with all my love. 
+                            Valid for eternity!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const loading = document.getElementById('loading');
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const closeModal = document.getElementById('closeModal');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            
+            // Passcode elements
+            const passcodeDigits = [
+                document.getElementById('digit1'),
+                document.getElementById('digit2'),
+                document.getElementById('digit3'),
+                document.getElementById('digit4')
+            ];
+            const numberButtons = document.querySelectorAll('.number-btn[data-number]');
+            const clearBtn = document.getElementById('clearBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Card elements
+            const cards = document.querySelectorAll('.card');
+            const modalCards = [
+                document.getElementById('modalCard1'),
+                document.getElementById('modalCard2'),
+                document.getElementById('modalCard3')
+            ];
+            
+            // Variables
+            let enteredPasscode = '';
+            // 1402 Placeholder untuk passcode rahasia
+            const correctPasscode = '1402';
+            let currentCard = 1;
+            
+            // Hide loading screen
+            setTimeout(() => {
+                loading.classList.add('hidden');
+            }, 1500);
+            
+            // Number button click handler
+            numberButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (enteredPasscode.length < 4) {
+                        enteredPasscode += this.getAttribute('data-number');
+                        updatePasscodeDisplay();
+                        
+                        // Haptic feedback for mobile
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(30);
+                        }
+                        
+                        // Check if passcode is complete
+                        if (enteredPasscode.length === 4) {
+                            if (enteredPasscode === correctPasscode) {
+                                // Correct passcode - transition to page 2
+                                setTimeout(() => {
+                                    page1.classList.remove('active');
+                                    page2.classList.add('active');
+                                }, 500);
+                            } else {
+                                // Wrong passcode
+                                errorMessage.classList.add('show');
+                                setTimeout(() => {
+                                    enteredPasscode = '';
+                                    updatePasscodeDisplay();
+                                    errorMessage.classList.remove('show');
+                                }, 1500);
+                                
+                                // Haptic feedback for error
+                                if ('vibrate' in navigator) {
+                                    navigator.vibrate([100, 50, 100]);
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // Clear button
+            clearBtn.addEventListener('click', function() {
+                enteredPasscode = '';
+                updatePasscodeDisplay();
+                errorMessage.classList.remove('show');
+                
+                // Haptic feedback
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            });
+            
+            // Card click handlers
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    currentCard = parseInt(this.getAttribute('data-card'));
+                    showModal(currentCard);
+                    
+                    // Haptic feedback
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(50);
+                    }
+                });
+            });
+            
+            // Modal close button
+            closeModal.addEventListener('click', closeModalFunc);
+            
+            // Modal overlay click to close
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    closeModalFunc();
+                }
+            });
+            
+            // Logout button
+            logoutBtn.addEventListener('click', function() {
+                if (confirm("Lock the page? You'll need to enter the passcode again.")) {
+                    page2.classList.remove('active');
+                    page1.classList.add('active');
+                    enteredPasscode = '';
+                    updatePasscodeDisplay();
+                    
+                    // Haptic feedback
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(100);
+                    }
+                }
+            });
+            
+            // Functions
+            function updatePasscodeDisplay() {
+                for (let i = 0; i < 4; i++) {
+                    if (i < enteredPasscode.length) {
+                        passcodeDigits[i].textContent = enteredPasscode[i];
+                        passcodeDigits[i].classList.add('filled');
+                    } else {
+                        passcodeDigits[i].textContent = '';
+                        passcodeDigits[i].classList.remove('filled');
+                    }
+                }
+            }
+            
+            function showModal(cardNumber) {
+                // Hide all modal cards
+                modalCards.forEach(card => {
+                    card.style.display = 'none';
+                });
+                
+                // Show selected modal card
+                modalCards[cardNumber - 1].style.display = 'block';
+                
+                // Show modal overlay
+                modalOverlay.classList.add('active');
+                
+                // Prevent body scroll
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeModalFunc() {
+                modalOverlay.classList.remove('active');
+                
+                // Allow body scroll
+                document.body.style.overflow = '';
+                
+                // Haptic feedback
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(30);
+                }
+            }
+            
+            // Preload images
+            function preloadImages() {
+                const images = [
+                    'https://files.catbox.moe/bzj2ty.png',
+                    'https://files.catbox.moe/rscyc1.png',
+                    'https://files.catbox.moe/h21gqs.png',
+                    'https://files.catbox.moe/vvhdw0.jpg',
+                    // Tambahkan URL foto yang akan digunakan
+                    '[PHOTO_URL]'
+                ];
+                
+                images.forEach(src => {
+                    const img = new Image();
+                    img.src = src;
+                });
+            }
+            
+            // Initialize preload
+            preloadImages();
+            
+            // Keyboard support for passcode (optional)
+            document.addEventListener('keydown', function(e) {
+                if (page1.classList.contains('active')) {
+                    const key = e.key;
+                    
+                    if (key >= '0' && key <= '9') {
+                        if (enteredPasscode.length < 4) {
+                            enteredPasscode += key;
+                            updatePasscodeDisplay();
+                            
+                            if (enteredPasscode.length === 4) {
+                                if (enteredPasscode === correctPasscode) {
+                                    setTimeout(() => {
+                                        page1.classList.remove('active');
+                                        page2.classList.add('active');
+                                    }, 500);
+                                } else {
+                                    errorMessage.classList.add('show');
+                                    setTimeout(() => {
+                                        enteredPasscode = '';
+                                        updatePasscodeDisplay();
+                                        errorMessage.classList.remove('show');
+                                    }, 1500);
+                                }
+                            }
+                        }
+                    } else if (key === 'Backspace' || key === 'Delete') {
+                        enteredPasscode = enteredPasscode.slice(0, -1);
+                        updatePasscodeDisplay();
+                        errorMessage.classList.remove('show');
+                    }
+                }
+            });
+            
+            // Mobile touch improvements
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // Prevent zoom on buttons
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('touchstart', function(e) {
+                    e.stopPropagation();
+                }, {passive: true});
+            });
+        });
+    </script>
+</body>
+</html>
